@@ -1,0 +1,67 @@
+# every vertex is a component
+# out of each component, mark the lightest edge leaving each vertex
+#### contract each marked edge and recurse
+
+
+
+
+
+Idea:
+    on a new graph g
+    you will update the components of g by looping over the safe edges, storing components in a list. During the loop of the safe edges you will change the components of a node to another node (the one on the other side of the safe edge) by doing a DFS on one side of the end point looking at everying in its component, updating it.
+
+    you will create a new graph using the components that you found. This graph starts with c nodes, where c is the number of components that you found. 
+    for all edges, if they have end points in different compoennts and its the smallest edge so far between the two components, add that edge to the new graph of super nodes between the two super nodes representing the components 
+
+    the result is that all nodes in the same compoennt will be merged into one super node, with  edges going out to different components (that were also turned into a super node)
+
+    This will run in O(v + e) time. Based on the safe edges we know the components, We then relable each of of the nodes components which takes O(vlogv). we then create a new super node graph based on the components and for each of the edges we look at it and see if we want to add it to this new super node graph, so that takes O(e) time.
+
+    I would store the graph in a list of hash tables. So that adding neighbors would be in constant time
+    I would have a list that kept track of the component of each node
+
+
+
+
+
+
+=====
+2a
+    page 292 textbook, do belman ford uptill the last for loop then do
+        find a tense edge
+        grab the vertex at one of the ends of that tense edge
+        for all edge going out of that edge, find a tense edge
+        repeat till we are back at our original edge
+        return all the nodes that we passed over
+
+        for each edge u->v:
+            if edge is tense:
+                
+        this alogirthm still runs in O(VE) time because the part that I added to the algorithm operates in O(v+e) time. This is because we loop till we find a tense edge, which is O(e) time. Once we find that tense edge, we grab on of the end points and follow the string of tense edges till we get back to the original node. At most this string of tense edges will be the entire graph so this will operate in O(v+e) time
+====
+2b
+    do belman ford but instead of the last for loop do this
+
+    for every edge u->v:
+        if u->v is tense:
+            u, v dist = -infinity
+
+    while list is not empty:
+        u = grab item from list
+        for each edge u->v:
+            if v.dist != infinity:
+                v.dist = infinity
+                add v to list
+
+    idea: if you find a negative cycle, everything that the negative cycle feeds into will be a distance of negative infinity
+
+    This algo will run in O(VE). This is because the belman ford stuff that i'm borrowing already runs in O(VE) and the stuff that I add runs in O(VE).
+
+    The while loop should run in O(VE) 
+        
+    becuase we loop over every node that will have a distance of -infinity, this is because they will only be added to the bad if their distance is -infinity so at most every vertex 
+
+    and for all those verticies we check all of their out edges, We only add an item to our list when it hasn't been added (because otherwise it would already have a distance of inifinty). this means that the real work done is only between the subgraph of nodes and edges that will have -INFINITY distance.
+
+    for each node v that has a distance of -ininifty, we check of of their edges e. This means that for we will check at most v nodes and at most e edges. though we are quite likey in most graphs to check far below that amount. Because of that the whole algorithm will run in O(VE)
+

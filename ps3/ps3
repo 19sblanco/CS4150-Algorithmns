@@ -1,0 +1,60 @@
+give recursive formula
+
+english description of recursive fuctntion
+    for our maxValue function we split it up into 3 subfunctions.
+        * maxValue0 - max if the uncloseable room = 0
+        * maxValue1 - max if the uncloseable room = 1
+        * maxValue-1 - max if the uncloseable room = -1
+    each subfunction works like an if statment in the main function and are used to make the problem simplier. MaxValue0 will return maxValue between closing room 1 and closing neither room, but if a room must be closed it will return the max value of closing room 1. Simular things are used for maxValue1 and maxValue-1. 
+
+
+describe the data structure you would use to memoize your formula
+    The data structure that I will use to memoize this algorithm is 3 1d arrays.
+
+describe order you would fill memo
+    first fill in the base cases, 0's at the bottom of the 3 1d arrays
+    maxValue0Memo - starting from the bottom (n) going to the top (0) of the array, you will need the value on the row below you in your own array and the value of the row below you in the maxValue-1Memo array
+
+    maxValue1Memo - starting from the bottom and going to the top of the arrya, you will need (simular to maxValue0Memo)
+        * maxValue1Memo[r+1] and maxValue-1Memo[r+1]
+
+describe running time of your algorithmn
+    The running time of this algorithm is O(3n). This is becuase we are fill up 3 arrays of size n or doing 3n work in total. In big O notatation, smaller functions fall to larger functions, in this case the 3 gets dropped because of the n and we are left with O(n)
+
+
+
+    
+# first create the memo for the problem, we will be using this part of the problem from the book
+
+===
+
+fastNumPart(A[1...n]):
+    SplitTable[n+1] = 1
+    
+    for i <- n down to 1:
+        SplitTable[i] = 0
+
+        for j <- i to n:
+            if isWord(A[i:j]) and SplitTable[j+1] > 0: 
+                splitTable[i] += 1
+
+    return splitTable[1]
+
+===
+
+1) iterate through both lists and every time that you find a match put that in a table
+    * is i, j a word in both
+    * and is j+1 splitable in both
+2) then check the first index of the table
+
+Splitable2(A[1...n], B[1...n]):
+    table[n+1] = true
+
+    for i <- n down to 1:
+        table[i] = false
+
+        for j <- i to n:
+            if isWord(A[i:j]) and isWord(B[i:j]) and table[j+1] == true:
+                table[i] = True
+
+    return table[1]
